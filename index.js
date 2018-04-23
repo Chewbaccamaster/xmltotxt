@@ -2,8 +2,11 @@ const fs = require('fs');
 const xml2js = require('xml2js');
 const util = require('util');
 const parser = new xml2js.Parser({ mergeAttrs: true, explicitArray: false, preserveChildrenOrder: true });
-const filePath = "C:\\Studies\\corporat\\log.xml"; // Set path to xml file;
+const filePath = process.argv[2]; // Set path to xml file;
+const outName = process.argv[3]; // Set path to out txt file
+
 let fileObject = {};
+
 const file = fs.readFileSync(filePath, 'utf8');
 parser.parseString(file, (err, result) => { // parse xml file
     if (err) throw err;
@@ -12,7 +15,7 @@ parser.parseString(file, (err, result) => { // parse xml file
 if (fileObject['tt']) {
     fileObject = fileObject['tt']; // remove <tt> tag
 }
-const writer = fs.createWriteStream('tags.txt', {}); // function writes to txt file
+const writer = fs.createWriteStream(outName, {}); // function writes to txt file
 const convertToString = obj => { // convert JavaScript Object to String
     let str = '';
     for (const key in obj) {
@@ -24,7 +27,6 @@ const convertToString = obj => { // convert JavaScript Object to String
     }
     return str;
 }
-
 for (const key in fileObject) {
     if (Array.isArray(fileObject[key])) { // if we have same tags in xml; example: <uz> </uz>, <uz> </uz> --> parser converts such case to one array of tags
         for (const dataItem of fileObject[key]) {
