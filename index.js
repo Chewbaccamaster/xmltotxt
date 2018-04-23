@@ -30,14 +30,14 @@ const convertToString = obj => { // convert JavaScript Object to String
 for (const key in fileObject) {
     if (Array.isArray(fileObject[key])) { // if we have same tags in xml; example: <uz> </uz>, <uz> </uz> --> parser converts such case to one array of tags
         for (const dataItem of fileObject[key]) {
-            writer.write(`${key}`);
+            writer.write(`${key}\r\n`);
             const keys = Object.keys(dataItem);
             let i = 0;
             let writableObject = {};
             while (i < keys.length) {
                 if (i % 4 === 0) { // if we have 4 tags to write to file
                     const string = convertToString(writableObject);
-                    writer.write(`${string}\n`); // write to string line
+                    writer.write(`${string}\r\n`); // write to string line
                     writableObject = {};
                 }
                 const tag = keys[i];
@@ -45,7 +45,7 @@ for (const key in fileObject) {
                 i++;
             }
             const string = convertToString(writableObject);
-            writer.write(`${string}\n\n`);
+            writer.write(`${string}\r\n`);
         }
     } else {
         writer.write(`${key}`);
@@ -56,7 +56,7 @@ for (const key in fileObject) {
         while (i < keys.length) {
             if (i % 4 === 0) {
                 const string = convertToString(writableObject);
-                writer.write(`${string}\n`);
+                writer.write(`${string}\r\n`);
                 writableObject = {};
             }
             const tag = keys[i];
@@ -64,7 +64,7 @@ for (const key in fileObject) {
             i++;
         }
         const string = convertToString(writableObject);
-        writer.write(`${string}\n\n`);
+        writer.write(`${string}\r\n`);
     }
 }
 
